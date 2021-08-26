@@ -16,4 +16,9 @@ services:
     working_dir: /usr/share/elasticsearch
     volumes: ['certs:/certs', '.:/usr/share/elasticsearch/config/certificates']
 
-volumes: {"certs"}
+volumes: 
+  certs:
+    driver_opts:
+      type: none
+      device: /home/ubuntu/certs
+      o: bind
