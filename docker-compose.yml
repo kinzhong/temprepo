@@ -42,10 +42,10 @@ volumes:
   data:
     driver_opts:
       type: none
-      device: /home/ubuntu/data
+      device: /home/ubuntu/elasticsearch/data
       o: bind
   certs:
     driver_opts:
       type: none
-      device: /home/ubuntu/certs
+      device: /home/ubuntu/elasticsearch/certs
       o: bind
