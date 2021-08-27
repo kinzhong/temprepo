@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #Creates Directories with correct permissions
-cd ..
+cd ~
 mkdir elasticsearch
 sudo chmod g+rwx elasticsearch
 sudo chgrp 0 elasticsearch
@@ -13,6 +13,8 @@ sudo chgrp 0 elasticsearch/certs
 mkdir elasticsearch/data
 sudo chmod g+rwx elasticsearch/data
 sudo chgrp 0 elasticsearch/data
+
+cd temprepo
 
 #Creates certs
 sudo docker-compose -f create-certs.yml run --rm create_certs
