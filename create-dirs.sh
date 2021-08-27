@@ -37,3 +37,4 @@ curl -u elastic:password -X GET "https://localhost/_search?pretty" -H 'Content-T
   ]
 }
 '
+
