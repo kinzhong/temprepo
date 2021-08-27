@@ -9,7 +9,7 @@ services:
       - discovery.type=single-node
       - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
       # sets JVM heap size to 32GB, half of the physical RAM 
-      - "ES_JAVA_OPTS=-Xms32g -Xmx32g"
+      #- "ES_JAVA_OPTS=-Xms32g -Xmx32g"
       - xpack.security.enabled=true
       - xpack.security.http.ssl.enabled=true
       - xpack.security.http.ssl.key=$CERTS_DIR/es01/es01.key
@@ -21,7 +21,7 @@ services:
       - xpack.security.transport.ssl.certificate=$CERTS_DIR/es01/es01.crt
       - xpack.security.transport.ssl.key=$CERTS_DIR/es01/es01.key
       - bootstrap.memory_lock=true
-    # disable swapping
+    # to disable swapping
     ulimits:
       memlock:
         soft: -1
