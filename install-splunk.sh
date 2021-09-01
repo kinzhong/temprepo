@@ -1,5 +1,5 @@
 #!/bin/sh
 sudo docker pull splunk/splunk:latest
-sudo docker run -d -p 8000:8000 -p "8089:8089" -e "SPLUNK_START_ARGS=--accept-license" -e "SPLUNK_PASSWORD=password" --name splunk splunk/splunk:latest
-curl -k -u admin:password https://localhost:8090/services/search/jobs -d search="search *"
+sudo docker run -d -p 8000:8000 -p 8089:8089 -e "SPLUNK_START_ARGS=--accept-license" -e "SPLUNK_PASSWORD=password" --name splunk splunk/splunk:latest
+curl -k -u admin:password https://localhost:8089/services/search/jobs -d search="search *"
 
