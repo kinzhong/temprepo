@@ -28,7 +28,7 @@ sudo update-ca-certificates --fresh
 sudo docker-compose up -d
 
 #Run test
-curl -u elastic:password -X GET "https://localhost/_search?pretty" -H 'Content-Type: application/json' -d'
+curl -u elastic:password -X GET "https://localhost:9200/_search?pretty" -H 'Content-Type: application/json' -d'
 {
   "query": {
     "match_all": { }
