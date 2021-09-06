@@ -3,7 +3,7 @@
 #Creates Directories with correct permissions
 mkdir ~/elasticsearch
 sudo chmod g+rwx ~/elasticsearch
-sudo chgrp 0 elasticsearch
+sudo chgrp 0 ~/elasticsearch
 
 mkdir ~/elasticsearch/certs
 sudo chmod g+rwx ~/elasticsearch/certs
