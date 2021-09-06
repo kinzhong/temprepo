@@ -1,20 +1,25 @@
 #!/bin/sh
 
 #Creates Directories with correct permissions
-cd ~
-mkdir elasticsearch
-sudo chmod g+rwx elasticsearch
+mkdir ~/elasticsearch
+sudo chmod g+rwx ~/elasticsearch
 sudo chgrp 0 elasticsearch
 
-mkdir elasticsearch/certs
-sudo chmod g+rwx elasticsearch/certs
-sudo chgrp 0 elasticsearch/certs
+mkdir ~/elasticsearch/certs
+sudo chmod g+rwx ~/elasticsearch/certs
+sudo chgrp 0 ~/elasticsearch/certs
 
-mkdir elasticsearch/data
-sudo chmod g+rwx elasticsearch/data
-sudo chgrp 0 elasticsearch/data
+mkdir ~/elasticsearch/data01
+sudo chmod g+rwx ~/elasticsearch/data01
+sudo chgrp 0 ~/elasticsearch/data01
 
-cd temprepo
+mkdir ~/elasticsearch/data02
+sudo chmod g+rwx ~/elasticsearch/data02
+sudo chgrp 0 ~/elasticsearch/data02
+
+mkdir ~/elasticsearch/data03
+sudo chmod g+rwx ~/elasticsearch/data03
+sudo chgrp 0 ~/elasticsearch/data03
 
 #Creates certs
 sudo docker-compose -f create-certs.yml run --rm create_certs
@@ -41,3 +46,4 @@ curl -u elastic:password -X GET "https://localhost:9200/_search?pretty" -H 'Cont
 }
 '
 
+curl -u elastic:password -X GET "https://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=50s&pretty"
