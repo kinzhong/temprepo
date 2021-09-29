@@ -36,7 +36,6 @@ services:
       - 9200:9200
     networks:
       - elastic
-    restart: "on-failure"
 
     healthcheck:
       test: curl --cacert $CERTS_DIR/ca/ca.crt -s https://localhost:9200 >/dev/null; if [[ $$? == 52 ]]; then echo 0; else echo 1; fi
@@ -44,11 +43,13 @@ services:
       timeout: 10s
       retries: 5
 
+    restart: "unless-stopped"
+
   wait_until_ready:
       image: docker.elastic.co/elasticsearch/elasticsearch:7.14.1
       command: /usr/bin/true
       depends_on: {"es01": {"condition": "service_healthy"}}
-
+   
   es02:
     container_name: es02
     image: docker.elastic.co/elasticsearch/elasticsearch:7.14.1
@@ -86,7 +87,8 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-    restart: "on-failure"
+
+    restart: "unless-stopped"
 
   es03:
     container_name: es03
@@ -125,7 +127,8 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-    restart: "on-failure"
+
+    restart: "unless-stopped"
 
 volumes:
   data01:
