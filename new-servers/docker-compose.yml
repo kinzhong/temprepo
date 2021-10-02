@@ -10,9 +10,9 @@ services:
       - cluster.name=es-docker-cluster
       - http.port=9204
       - transport.port=9304
-      - network.publish_host=192.168.24.101
-      - discovery.seed_hosts=server1:9300, server1:9301, server1:9302
-      - cluster.initial_master_nodes=server1:9300, server1:9302, server1:9303, server2:9304
+      - network.publish_host=$SERVER2
+      - discovery.seed_hosts=$SERVER1:9300, $SERVER1:9301, $SERVER1:9302
+      - cluster.initial_master_nodes=$SERVER1:9300, $SERVER1:9302, $SERVER1:9303, $SERVER2:9304
       - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
       # sets JVM heap size to 32GB, half of the physical RAM 
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
@@ -45,9 +45,6 @@ services:
     restart: "unless-stopped"
 
     network_mode: host
-    extra_hosts:
-      - "server1:192.168.24.100"
-      - "server2:192.168.24.101"
 
   wait_until_ready:
       image: docker.elastic.co/elasticsearch/elasticsearch:7.14.1
