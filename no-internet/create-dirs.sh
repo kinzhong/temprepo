@@ -24,6 +24,8 @@ sudo chgrp 0 ~/elasticsearch/data03
 #Creates certs
 sudo docker-compose -f create-certs.yml run --rm create_certs
 
+echo "Finished creating certs!"
+
 #Install elasticsearch CA’s certificate on host
 sudo cp ~/elasticsearch/certs/ca/ca.crt /etc/ssl/certs/elasticsearch-ca.crt
 sudo cp ~/elasticsearch/certs/ca/ca.crt /usr/local/share/ca-certificates/elasticsearch-ca.crt
@@ -34,6 +36,6 @@ sudo docker-compose up -d
 
 #Run test
 echo "Please run the following tests:"
-echo 'curl -u elastic:password https://172.17.0.1:9200/_cluster/health?pretty"'
-echo 'curl -u elastic:password https://localhost:9200/_cluster/health?pretty"'
+echo 'curl -u elastic:password "https://192.168.0.100:9200/_cluster/health?pretty"'
+echo 'curl -u elastic:password "https://localhost:9200/_cluster/health?pretty"'
 
