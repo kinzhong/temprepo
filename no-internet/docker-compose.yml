@@ -6,10 +6,13 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.14.1
     environment:
       - node.name=es01
+      - http.port=9200
+      - transport.port=9301
+      - network.publish_host=192.168.24.100
       #- discovery.type=single-node
       - cluster.name=es-docker-cluster
-      - discovery.seed_hosts=es02,es03
-      - cluster.initial_master_nodes=es01,es02,es03
+      - discovery.seed_hosts=server1:9302, server1:9303, server2:9304
+      - cluster.initial_master_nodes=server1:9301, server1:9302, server1:9303, server2:9304
       - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
       # sets JVM heap size to 32GB, half of the physical RAM 
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
@@ -32,10 +35,6 @@ services:
     volumes:
       - data01:/usr/share/elasticsearch/data
       - certs:$CERTS_DIR
-    ports:
-      - 9200:9200
-    networks:
-      - elastic
 
     healthcheck:
       test: curl --cacert $CERTS_DIR/ca/ca.crt -s https://localhost:9200 >/dev/null; if [[ $$? == 52 ]]; then echo 0; else echo 1; fi
@@ -44,6 +43,11 @@ services:
       retries: 5
 
     restart: "unless-stopped"
+
+    network_mode: host
+    extra_hosts:
+      - "server1:192.168.24.100"
+      - "server2:192.168.24.101"
 
   wait_until_ready:
       image: docker.elastic.co/elasticsearch/elasticsearch:7.14.1
@@ -55,9 +59,12 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.14.1
     environment:
       - node.name=es02
+      - http.port=9202
+      - transport.port=9302
+      - network.publish_host=192.168.24.100
       - cluster.name=es-docker-cluster
-      - discovery.seed_hosts=es01,es03
-      - cluster.initial_master_nodes=es01,es02,es03
+      - discovery.seed_hosts=server1:9301, server1:9303, server2:9304
+      - cluster.initial_master_nodes=server1:9301, server1:9302, server1:9303, server2:9304
       - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - xpack.security.enabled=true
@@ -80,10 +87,7 @@ services:
     volumes:
       - data02:/usr/share/elasticsearch/data
       - certs:$CERTS_DIR
-    ports:
-      - 9201:9200
-    networks:
-      - elastic
+
     healthcheck:
       test: curl --cacert $CERTS_DIR/ca/ca.crt -s https://localhost:9200 >/dev/null; if [[ $$? == 52 ]]; then echo 0; else echo 1; fi
       interval: 30s
@@ -92,14 +96,22 @@ services:
 
     restart: "unless-stopped"
 
+    network_mode: host
+    extra_hosts:
+      - "server1:192.168.24.100"
+      - "server2:192.168.24.101"
+
   es03:
     container_name: es03
     image: docker.elastic.co/elasticsearch/elasticsearch:7.14.1
     environment:
       - node.name=es03
+      - http.port=9203
+      - transport.port=9303
+      - network.publish_host=192.168.24.100
       - cluster.name=es-docker-cluster
-      - discovery.seed_hosts=es01,es02
-      - cluster.initial_master_nodes=es01,es02,es03
+      - discovery.seed_hosts=server1:9301, server1:9302, server2:9304
+      - cluster.initial_master_nodes=server1:9301, server1:9302, server1:9303, server2:9304
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
       - xpack.security.enabled=true
@@ -122,10 +134,7 @@ services:
     volumes:
       - data03:/usr/share/elasticsearch/data
       - certs:$CERTS_DIR
-    ports:
-      - 9202:9200
-    networks:
-      - elastic
+
     healthcheck:
       test: curl --cacert $CERTS_DIR/ca/ca.crt -s https://localhost:9200 >/dev/null; if [[ $$? == 52 ]]; then echo 0; else echo 1; fi
       interval: 30s
@@ -133,6 +142,11 @@ services:
       retries: 5
 
     restart: "unless-stopped"
+
+    network_mode: host
+    extra_hosts:
+      - "server1:192.168.24.100"
+      - "server2:192.168.24.101"
 
 volumes:
   data01:
@@ -155,7 +169,3 @@ volumes:
       type: none
       device: /home/ubuntu/elasticsearch/certs
       o: bind
-
-networks:
-  elastic:
-    driver: bridge
