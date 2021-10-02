@@ -11,8 +11,8 @@ services:
       - http.port=9204
       - transport.port=9304
       - network.publish_host=$SERVER2
-      - discovery.seed_hosts=$SERVER1:9300, $SERVER1:9301, $SERVER1:9302
-      - cluster.initial_master_nodes=$SERVER1:9300, $SERVER1:9302, $SERVER1:9303, $SERVER2:9304
+      - discovery.seed_hosts=$SERVER1:9301, $SERVER1:9302, $SERVER1:9303, $SERVER2:9305, $SERVER2:9306
+      - cluster.initial_master_nodes=$SERVER1:9301, $SERVER1:9302, $SERVER1:9303, $SERVER2:9304, $SERVER2:9305, $SERVER2:9306
       - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
       # sets JVM heap size to 32GB, half of the physical RAM 
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
@@ -46,10 +46,95 @@ services:
 
     network_mode: host
 
-  wait_until_ready:
-      image: docker.elastic.co/elasticsearch/elasticsearch:7.14.1
-      command: /usr/bin/true
-      depends_on: {"es04": {"condition": "service_healthy"}}
+  es05:
+    container_name: es05
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.14.1
+    environment:
+      - node.name=es05
+      #- discovery.type=single-node
+      - cluster.name=es-docker-cluster
+      - http.port=9205
+      - transport.port=9305
+      - network.publish_host=$SERVER2
+      - discovery.seed_hosts=$SERVER1:9301, $SERVER1:9302, $SERVER1:9303, $SERVER2:9304, $SERVER2:9306
+      - cluster.initial_master_nodes=$SERVER1:9301, $SERVER1:9302, $SERVER1:9303, $SERVER2:9304, $SERVER2:9305, $SERVER2:9306
+      - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
+      # sets JVM heap size to 32GB, half of the physical RAM 
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=true
+      - xpack.security.http.ssl.enabled=true
+      - xpack.security.http.ssl.key=$CERTS_DIR/es05/es05.key
+      - xpack.security.http.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
+      - xpack.security.http.ssl.certificate=$CERTS_DIR/es05/es05.crt
+      - xpack.security.transport.ssl.enabled=true
+      - xpack.security.transport.ssl.verification_mode=certificate 
+      - xpack.security.transport.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
+      - xpack.security.transport.ssl.certificate=$CERTS_DIR/es05/es05.crt
+      - xpack.security.transport.ssl.key=$CERTS_DIR/es05/es05.key
+      - bootstrap.memory_lock=true
+    # to disable swapping
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data05:/usr/share/elasticsearch/data
+      - certs:$CERTS_DIR
+
+    healthcheck:
+      test: curl --cacert $CERTS_DIR/ca/ca.crt -s https://localhost:9200 >/dev/null; if [[ $$? == 52 ]]; then echo 0; else echo 1; fi
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+    restart: "unless-stopped"
+
+    network_mode: host
+
+  es06:
+    container_name: es06
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.14.1
+    environment:
+      - node.name=es06
+      #- discovery.type=single-node
+      - cluster.name=es-docker-cluster
+      - http.port=9206
+      - transport.port=9306
+      - network.publish_host=$SERVER2
+      - discovery.seed_hosts=$SERVER1:9301, $SERVER1:9302, $SERVER1:9303, $SERVER2:9304, $SERVER2:9305
+      - cluster.initial_master_nodes=$SERVER1:9301, $SERVER1:9302, $SERVER1:9303, $SERVER2:9304, $SERVER2:9305, $SERVER2:9306
+      - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
+      # sets JVM heap size to 32GB, half of the physical RAM 
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=true
+      - xpack.security.http.ssl.enabled=true
+      - xpack.security.http.ssl.key=$CERTS_DIR/es06/es06.key
+      - xpack.security.http.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
+      - xpack.security.http.ssl.certificate=$CERTS_DIR/es06/es06.crt
+      - xpack.security.transport.ssl.enabled=true
+      - xpack.security.transport.ssl.verification_mode=certificate 
+      - xpack.security.transport.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
+      - xpack.security.transport.ssl.certificate=$CERTS_DIR/es06/es06.crt
+      - xpack.security.transport.ssl.key=$CERTS_DIR/es06/es06.key
+      - bootstrap.memory_lock=true
+    # to disable swapping
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data06:/usr/share/elasticsearch/data
+      - certs:$CERTS_DIR
+
+    healthcheck:
+      test: curl --cacert $CERTS_DIR/ca/ca.crt -s https://localhost:9200 >/dev/null; if [[ $$? == 52 ]]; then echo 0; else echo 1; fi
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+    restart: "unless-stopped"
+
+    network_mode: host
 
 volumes:
   data04:
@@ -57,12 +142,18 @@ volumes:
       type: none
       device: /home/ubuntu/elasticsearch/data04
       o: bind
+  data05:
+    driver_opts:
+      type: none
+      device: /home/ubuntu/elasticsearch/data05
+      o: bind
+  data06:
+    driver_opts:
+      type: none
+      device: /home/ubuntu/elasticsearch/data06
+      o: bind
   certs:
     driver_opts:
       type: none
       device: /home/ubuntu/elasticsearch/certs
       o: bind
-
-#networks:
-#  elastic:
-#    driver: bridge
