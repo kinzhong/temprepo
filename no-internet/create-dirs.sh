@@ -33,17 +33,7 @@ sudo update-ca-certificates --fresh
 sudo docker-compose up -d
 
 #Run test
-curl -u elastic:password -X GET "https://localhost:9200/_search?pretty" -H 'Content-Type: application/json' -d'
-{
-  "query": {
-    "match_all": { }
-  },
-  "sort": [
-    {
-      "@timestamp": "desc"
-    }
-  ]
-}
-'
+echo "Please run the following tests:"
+echo 'curl -u elastic:password https://172.17.0.1:9200/_cluster/health?pretty"'
+echo 'curl -u elastic:password https://localhost:9200/_cluster/health?pretty"'
 
-curl -u elastic:password -X GET "https://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=50s&pretty"
