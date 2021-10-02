@@ -11,8 +11,9 @@ services:
       - network.publish_host=$SERVER1
       #- discovery.type=single-node
       - cluster.name=es-docker-cluster
-      - discovery.seed_hosts=$SERVER1:9302, $SERVER1:9303, $SERVER2:9304
-      - cluster.initial_master_nodes=$SERVER1:9301, $SERVER1:9302, $SERVER1:9303, $SERVER2:9304
+#      - discovery.seed_hosts=server1:9302, server1:9303, server2:9304, server2:9305, server2:9306
+      - discovery.seed_hosts=server1:9302, server1:9303
+      - cluster.initial_master_nodes=server1:9301, server1:9302, server1:9303
       - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
       # sets JVM heap size to 32GB, half of the physical RAM 
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
@@ -45,6 +46,9 @@ services:
     restart: "unless-stopped"
 
     network_mode: host
+    extra_hosts:
+      - "server1:$SERVER1"
+      - "server2:$SERVER2"
 
   wait_until_ready:
       image: docker.elastic.co/elasticsearch/elasticsearch:7.14.1
@@ -60,8 +64,10 @@ services:
       - transport.port=9302
       - network.publish_host=$SERVER1
       - cluster.name=es-docker-cluster
-      - discovery.seed_hosts=$SERVER1:9301, $SERVER1:9303, $SERVER2:9304
-      - cluster.initial_master_nodes=$SERVER1:9301, $SERVER1:9302, $SERVER1:9303, $SERVER2:9304
+#      - discovery.seed_hosts=server1:9301, server1:9303, server2:9304, server2:9305, server2:9306
+      - discovery.seed_hosts=server1:9301, server1:9303 
+      #- cluster.initial_master_nodes=server1:9301, server1:9302, server1:9303, server2:9304, server2:9305, server2:9306
+      - cluster.initial_master_nodes=server1:9301, server1:9302, server1:9303                                          
       - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - xpack.security.enabled=true
@@ -94,6 +100,9 @@ services:
     restart: "unless-stopped"
 
     network_mode: host
+    extra_hosts:
+      - "server1:$SERVER1"
+      - "server2:$SERVER2"
 
   es03:
     container_name: es03
@@ -104,8 +113,9 @@ services:
       - transport.port=9303
       - network.publish_host=$SERVER1
       - cluster.name=es-docker-cluster
-      - discovery.seed_hosts=$SERVER1:9301, $SERVER1:9302, $SERVER2:9304
-      - cluster.initial_master_nodes=$SERVER1:9301, $SERVER1:9302, $SERVER1:9303, $SERVER2:9304
+#      - discovery.seed_hosts=server1:9301, server1:9302, server2:9304, server2:9305, server2:9306
+      - discovery.seed_hosts=server1:9301, server1:9302
+      - cluster.initial_master_nodes=server1:9301, server1:9302, server1:9303                                          
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
       - xpack.security.enabled=true
@@ -138,6 +148,9 @@ services:
     restart: "unless-stopped"
 
     network_mode: host
+    extra_hosts:
+      - "server1:$SERVER1"
+      - "server2:$SERVER2"
 
 volumes:
   data01:
