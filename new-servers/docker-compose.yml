@@ -1,12 +1,12 @@
 version: '2.2'
 
 services:
+  # Master Node
   es04:
     container_name: es04
     image: docker.elastic.co/elasticsearch/elasticsearch:7.14.1
     environment:
       - node.name=es04
-      #- discovery.type=single-node
       - cluster.name=es-docker-cluster
       - http.port=9204
       - transport.port=9304
@@ -45,12 +45,13 @@ services:
 
     network_mode: host
 
+  # Data Node
   es05:
     container_name: es05
     image: docker.elastic.co/elasticsearch/elasticsearch:7.14.1
     environment:
       - node.name=es05
-      #- discovery.type=single-node
+      - node.roles=data, data_content, data_hot, data_warm, data_cold, data_frozen, ingest, ml, remote_cluster_client, transform
       - cluster.name=es-docker-cluster
       - http.port=9205
       - transport.port=9305
@@ -89,12 +90,13 @@ services:
 
     network_mode: host
 
+  # Data Node
   es06:
     container_name: es06
     image: docker.elastic.co/elasticsearch/elasticsearch:7.14.1
     environment:
       - node.name=es06
-      #- discovery.type=single-node
+      - node.roles=data, data_content, data_hot, data_warm, data_cold, data_frozen, ingest, ml, remote_cluster_client, transform
       - cluster.name=es-docker-cluster
       - http.port=9206
       - transport.port=9306
