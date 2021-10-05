@@ -12,7 +12,6 @@ services:
       - transport.port=9304
       - network.publish_host=$SERVER2
       - discovery.seed_hosts=$SERVER1:9301, $SERVER1:9302, $SERVER1:9303, $SERVER2:9305, $SERVER2:9306
-      - cluster.initial_master_nodes=$SERVER1:9301, $SERVER1:9302, $SERVER1:9303, $SERVER2:9304, $SERVER2:9305, $SERVER2:9306
       - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
       # sets JVM heap size to 32GB, half of the physical RAM 
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
@@ -57,7 +56,6 @@ services:
       - transport.port=9305
       - network.publish_host=$SERVER2
       - discovery.seed_hosts=$SERVER1:9301, $SERVER1:9302, $SERVER1:9303, $SERVER2:9304, $SERVER2:9306
-      - cluster.initial_master_nodes=$SERVER1:9301, $SERVER1:9302, $SERVER1:9303, $SERVER2:9304, $SERVER2:9305, $SERVER2:9306
       - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
       # sets JVM heap size to 32GB, half of the physical RAM 
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
@@ -102,7 +100,6 @@ services:
       - transport.port=9306
       - network.publish_host=$SERVER2
       - discovery.seed_hosts=$SERVER1:9301, $SERVER1:9302, $SERVER1:9303, $SERVER2:9304, $SERVER2:9305
-      - cluster.initial_master_nodes=$SERVER1:9301, $SERVER1:9302, $SERVER1:9303, $SERVER2:9304, $SERVER2:9305, $SERVER2:9306
       - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
       # sets JVM heap size to 32GB, half of the physical RAM 
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
