@@ -1,6 +1,7 @@
 version: '2.2'
 
 services:
+  # Master Node
   es01:
     container_name: es01
     image: docker.elastic.co/elasticsearch/elasticsearch:7.14.1
@@ -9,10 +10,9 @@ services:
       - http.port=9200
       - transport.port=9301
       - network.publish_host=$SERVER1
-      #- discovery.type=single-node
       - cluster.name=es-docker-cluster
       - discovery.seed_hosts=$SERVER1:9302, $SERVER1:9303, $SERVER2:9304, $SERVER2:9305, $SERVER2:9306
-      - cluster.initial_master_nodes=$SERVER1:9301, $SERVER1:9302, $SERVER1:9303
+      - cluster.initial_master_nodes=$SERVER1:9301, $SERVER1:9302
       - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
       # sets JVM heap size to 32GB, half of the physical RAM 
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
@@ -50,7 +50,8 @@ services:
       image: docker.elastic.co/elasticsearch/elasticsearch:7.14.1
       command: /usr/bin/true
       depends_on: {"es01": {"condition": "service_healthy"}}
-   
+  
+  # Master Node
   es02:
     container_name: es02
     image: docker.elastic.co/elasticsearch/elasticsearch:7.14.1
@@ -61,7 +62,7 @@ services:
       - network.publish_host=$SERVER1
       - cluster.name=es-docker-cluster
       - discovery.seed_hosts=$SERVER1:9301, $SERVER1:9303, $SERVER2:9304, $SERVER2:9305, $SERVER2:9306
-      - cluster.initial_master_nodes=$SERVER1:9301, $SERVER1:9302, $SERVER1:9303
+      - cluster.initial_master_nodes=$SERVER1:9301, $SERVER1:9302
       - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - xpack.security.enabled=true
@@ -95,17 +96,19 @@ services:
 
     network_mode: host
 
+  # Data Node
   es03:
     container_name: es03
     image: docker.elastic.co/elasticsearch/elasticsearch:7.14.1
     environment:
       - node.name=es03
+      - node.roles=data, data_content, data_hot, data_warm, data_cold, data_frozen, ingest, ml, remote_cluster_client, transform
       - http.port=9203
       - transport.port=9303
       - network.publish_host=$SERVER1
       - cluster.name=es-docker-cluster
       - discovery.seed_hosts=$SERVER1:9301, $SERVER1:9302, $SERVER2:9304, $SERVER2:9305, $SERVER2:9306
-      - cluster.initial_master_nodes=$SERVER1:9301, $SERVER1:9302, $SERVER1:9303
+      - cluster.initial_master_nodes=$SERVER1:9301, $SERVER1:9302
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
       - xpack.security.enabled=true
