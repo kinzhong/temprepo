@@ -14,7 +14,7 @@ services:
       - discovery.seed_hosts=$SERVER1:9301, $SERVER1:9302, $SERVER1:9303, $SERVER2:9305, $SERVER2:9306
       - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
       # sets JVM heap size to 32GB, half of the physical RAM 
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Xms10g -Xmx10g"
       - xpack.security.enabled=true
       - xpack.security.http.ssl.enabled=true
       - xpack.security.http.ssl.key=$CERTS_DIR/es04/es04.key
@@ -59,7 +59,7 @@ services:
       - discovery.seed_hosts=$SERVER1:9301, $SERVER1:9302, $SERVER1:9303, $SERVER2:9304, $SERVER2:9306
       - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
       # sets JVM heap size to 32GB, half of the physical RAM 
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Xms10g -Xmx10g"
       - xpack.security.enabled=true
       - xpack.security.http.ssl.enabled=true
       - xpack.security.http.ssl.key=$CERTS_DIR/es05/es05.key
@@ -104,7 +104,7 @@ services:
       - discovery.seed_hosts=$SERVER1:9301, $SERVER1:9302, $SERVER1:9303, $SERVER2:9304, $SERVER2:9305
       - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
       # sets JVM heap size to 32GB, half of the physical RAM 
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Xms10g -Xmx10g"
       - xpack.security.enabled=true
       - xpack.security.http.ssl.enabled=true
       - xpack.security.http.ssl.key=$CERTS_DIR/es06/es06.key
