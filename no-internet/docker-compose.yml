@@ -15,7 +15,7 @@ services:
       - cluster.initial_master_nodes=$SERVER1:9301, $SERVER1:9302
       - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
       # sets JVM heap size to 32GB, half of the physical RAM 
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Xms5g -Xmx5g"
       - xpack.security.enabled=true
       - xpack.security.http.ssl.enabled=true
       - xpack.security.http.ssl.key=$CERTS_DIR/es01/es01.key
@@ -64,7 +64,7 @@ services:
       - discovery.seed_hosts=$SERVER1:9301, $SERVER1:9303, $SERVER2:9304, $SERVER2:9305, $SERVER2:9306
       - cluster.initial_master_nodes=$SERVER1:9301, $SERVER1:9302
       - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Xms5g -Xmx5g"
       - xpack.security.enabled=true
       - xpack.security.http.ssl.enabled=true
       - xpack.security.http.ssl.key=$CERTS_DIR/es02/es02.key
@@ -109,7 +109,7 @@ services:
       - cluster.name=es-docker-cluster
       - discovery.seed_hosts=$SERVER1:9301, $SERVER1:9302, $SERVER2:9304, $SERVER2:9305, $SERVER2:9306
       - cluster.initial_master_nodes=$SERVER1:9301, $SERVER1:9302
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Xms5g -Xmx5g"
       - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
       - xpack.security.enabled=true
       - xpack.security.http.ssl.enabled=true
